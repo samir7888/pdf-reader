@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, FileText, ArrowLeft, Loader2 } from 'lucide-react';
 import { askQuestion } from '../../services/api';
-import Spinner from './Spinner';
 
 interface ChatInterfaceProps {
   fileName: string;
