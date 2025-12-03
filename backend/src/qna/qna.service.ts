@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { EmbeddingService } from 'src/embedding/embedding.service';
-import { GeminiService } from 'src/gemini/gemini.service';
-import { PineconeService } from 'src/pinecone/pinecone.service';
+import { EmbeddingService } from 'backend/src/embedding/embedding.service';
+import { GeminiService } from 'backend/src/gemini/gemini.service';
+import { PineconeService } from 'backend/src/pinecone/pinecone.service';
 
 @Injectable()
 export class QnaService {

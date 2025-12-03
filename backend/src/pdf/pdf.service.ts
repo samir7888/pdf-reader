@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
 import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
-import { EmbeddingService } from 'src/embedding/embedding.service';
-import { PineconeService } from 'src/pinecone/pinecone.service';
+import { EmbeddingService } from 'backend/src/embedding/embedding.service';
+import { PineconeService } from 'backend/src/pinecone/pinecone.service';
 import * as path from 'path';
-import { GeminiService } from 'src/gemini/gemini.service';
+import { GeminiService } from 'backend/src/gemini/gemini.service';
 
 @Injectable()
 export class PdfService {
