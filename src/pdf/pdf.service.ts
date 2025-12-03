@@ -39,22 +39,8 @@ export class PdfService {
       fileId, // pass a unique id for each PDF
     );
 
-    const question = 'Provide a brief summary of the document.';
-    const queryVector = await this.embeddingservice.embedQuery(question);
-    const results = await this.pineconeService.search(queryVector);
-    const prompt = `
-Use ONLY the following text to answer:
-
-${results.join('\n\n')}
-
-Question: ${question}
-`;
-
-    const answer = await this.geminiService.ask(prompt);
-
     return {
-      question,
-      answer,
+      message: 'PDF processed and embeddings stored successfully',
     };
   }
 }
