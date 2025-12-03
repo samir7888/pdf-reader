@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { AskDto } from './dto/ask.dto';
 import { QnaService } from './qna.service';
 
-@Controller('qna')
+@Controller('ask')
 export class QnaController {
   constructor(private readonly qnaService: QnaService) {}
   @Post()

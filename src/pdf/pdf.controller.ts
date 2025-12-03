@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -13,6 +14,10 @@ import { PdfService } from './pdf.service';
 @Controller('pdf')
 export class PdfController {
   constructor(private readonly pdfservice: PdfService) {}
+  @Get()
+  healthCheck() {
+    return { status: 'PDF Service is running' };
+  }
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {
