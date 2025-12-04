@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { EmbeddingService } from 'backend/src/embedding/embedding.service';
-import { GeminiService } from 'backend/src/gemini/gemini.service';
-import { PineconeService } from 'backend/src/pinecone/pinecone.service';
+import { EmbeddingService } from '../embedding/embedding.service';
+import { GeminiService } from '../gemini/gemini.service';
+import { PineconeService } from '../pinecone/pinecone.service';
 
 @Injectable()
 export class QnaService {
@@ -16,7 +16,9 @@ export class QnaService {
     const results = await this.pineconeService.search(queryVector);
     const prompt = `
 Use ONLY the following text to answer:
-
+Give answer in the language of the question that user gives.
+for example, if user gives question in Hindi, answer in Hindi.
+if nepali, answer in nepali.
 ${results.join('\n\n')}
 
 Question: ${question}
