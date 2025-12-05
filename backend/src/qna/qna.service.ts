@@ -10,10 +10,13 @@ export class QnaService {
     private pineconeService: PineconeService,
     private geminiService: GeminiService,
   ) {}
-  async askGemini(question: string) {
+  async askGemini(
+    question: string,
+    type: 'pdf' | 'youtube',
+  ): Promise<{ question: string; answer: string }> {
     // Placeholder implementation
     const queryVector = await this.embeddingservice.embedQuery(question);
-    const results = await this.pineconeService.search(queryVector);
+    const results = await this.pineconeService.search(queryVector, 5, type);
     const prompt = `
 Use ONLY the following text to answer:
 Give answer in the language of the question that user gives.

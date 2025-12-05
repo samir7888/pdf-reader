@@ -36,7 +36,8 @@ export class PdfService {
     await this.pineconeService.upsertEmbeddings(
       chunks,
       embeddings,
-      fileId, // pass a unique id for each PDF
+      fileId,
+      'pdf',
     );
 
     return {

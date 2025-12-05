@@ -5,10 +5,16 @@ import { QnaService } from './qna.service';
 @Controller('ask')
 export class QnaController {
   constructor(private readonly qnaService: QnaService) {}
-  @Post()
-  async askQnA(
+  @Post('pdf')
+  async askPdf(
     @Body() askDto: AskDto,
   ): Promise<{ question: string; answer: string }> {
-    return await this.qnaService.askGemini(askDto.question);
+    return await this.qnaService.askGemini(askDto.question, 'pdf');
+  }
+  @Post('youtube')
+  async askYoutube(
+    @Body() askDto: AskDto,
+  ): Promise<{ question: string; answer: string }> {
+    return await this.qnaService.askGemini(askDto.question, 'youtube');
   }
 }

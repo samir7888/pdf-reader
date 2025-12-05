@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class PineconeService {
   private pinecone: Pinecone;
-  private indexName = 'pdf'; // your index name
+  // private indexName = 'pdf';
 
   // 👈 Inject ConfigService in the constructor
   constructor(private configService: ConfigService) {
@@ -25,14 +25,19 @@ export class PineconeService {
     });
   }
 
-  async upsertEmbeddings(chunks: string[], vectors: number[][], docId: string) {
-    const index = this.pinecone.Index(this.indexName);
+  async upsertEmbeddings(
+    chunks: string[],
+    vectors: number[][],
+    sourceId: string,
+    type: 'pdf' | 'youtube',
+  ) {
+    const index = this.pinecone.Index(type === 'pdf' ? 'pdf' : 'youtube');
 
     // Prepare vectors in Pinecone format
     const records = chunks.map((text, i) => ({
-      id: `${docId}-chunk-${i}`,
+      id: `${sourceId}_chunk_${i}`,
       values: vectors[i], // embedding vector (now a number[] for each chunk)
-      metadata: { text }, // store original chunk
+      metadata: { text, type, sourceId }, // store original chunk
     }));
 
     // Upload to Pinecone
@@ -43,8 +48,8 @@ export class PineconeService {
     };
   }
 
-  async search(queryVector: number[], topK = 5) {
-    const index = this.pinecone.Index(this.indexName);
+  async search(queryVector: number[], topK = 5, indexName: string) {
+    const index = this.pinecone.Index(indexName);
 
     const result = await index.query({
       vector: queryVector,

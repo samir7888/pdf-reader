@@ -6,6 +6,7 @@ import { QnaModule } from './qna/qna.module';
 import { EmbeddingModule } from './embedding/embedding.module';
 import { ConfigModule } from '@nestjs/config';
 import { PineconeModule } from './pinecone/pinecone.module';
+import { YoutubeModule } from './youtube/youtube.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PineconeModule } from './pinecone/pinecone.module';
     EmbeddingModule,
     ConfigModule.forRoot(),
     PineconeModule,
+    YoutubeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
