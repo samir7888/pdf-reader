@@ -3,12 +3,14 @@ import { Upload, FileText, X } from 'lucide-react';
 import { uploadPdf } from '../../services/api';
 import { AxiosError } from 'axios';
 import Spinner from './Spinner';
+import { Heading } from './Heading';
 
 interface UploadSectionProps {
   onFileUpload: (file: File) => void;
+  type: 'pdf' | 'youtube';
 }
 
-export function UploadSection({ onFileUpload }: UploadSectionProps) {
+export function UploadSection({ onFileUpload, type }: UploadSectionProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -74,16 +76,10 @@ export function UploadSection({ onFileUpload }: UploadSectionProps) {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
-      <div className="w-full max-w-2xl">
+    <div className="flex items-center justify-center px-4">
+      <div className="w-full max-w-4xl space-y-24">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-6">
-            <FileText className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-slate-900 text-4xl font-bold mb-3">Chat with Your PDF</h1>
-          <p className="text-slate-600 text-2xl">Upload a PDF document and ask questions about its content</p>
-        </div>
+        <Heading type={type} />
 
         {
           uploadError && selectedFile && (
@@ -93,14 +89,14 @@ export function UploadSection({ onFileUpload }: UploadSectionProps) {
           )
         }
         {/* Upload Area */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <div className=" rounded-2xl shadow-sm border border-slate-700 p-8">
           <div
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             className={`relative border-2 border-dashed rounded-xl p-12 transition-all duration-200 ${isDragging
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-slate-300 bg-slate-50 hover:border-slate-400'
+              ? 'border-blue-500 '
+              : 'border-slate-300  hover:border-slate-400'
               }`}
           >
             <input
@@ -127,15 +123,15 @@ export function UploadSection({ onFileUpload }: UploadSectionProps) {
                 </div>
               </label>
             ) : (
-              <div className='flex items-center space-y-4 flex-col justify-center'>
-                <div className="flex w-full items-center justify-between bg-white rounded-lg p-4 border border-slate-200">
+              <div className='flex items-center text-white space-y-4 flex-col justify-center'>
+                <div className="flex w-full items-center justify-between bg-black/50 rounded-lg p-4 border border-slate-200">
                   <div className="flex items-center gap-3">
                     <div className="flex items-center justify-center w-10 h-10 bg-red-50 rounded-lg">
                       <FileText className="w-5 h-5 text-red-600" />
                     </div>
                     <div>
-                      <p className="text-slate-900">{selectedFile.name}</p>
-                      <p className="text-slate-500">
+                      <p className="text-white">{selectedFile.name}</p>
+                      <p className="text-slate-200">
                         {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                       </p>
                     </div>
@@ -144,7 +140,7 @@ export function UploadSection({ onFileUpload }: UploadSectionProps) {
                     onClick={handleRemoveFile}
                     className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
                   >
-                    <X className="w-5 h-5 text-slate-600" />
+                    <X className="w-5 h-5 text-slate-400" />
                   </button>
                 </div>
                 {uploading && (
@@ -160,16 +156,16 @@ export function UploadSection({ onFileUpload }: UploadSectionProps) {
         {/* Features */}
         <div className="grid grid-cols-3 gap-4 mt-8">
           <div className="text-center">
-            <div className="text-blue-600 mb-2">🔒</div>
-            <p className="text-slate-600">Secure</p>
+            <div className="text-blue-600 mb-2 text-6xl">🔒</div>
+            <p className="text-slate-200  text-2xl  ">Secure</p>
           </div>
           <div className="text-center">
-            <div className="text-blue-600 mb-2">⚡</div>
-            <p className="text-slate-600">Fast</p>
+            <div className="text-blue-600 mb-2 text-6xl">⚡</div>
+            <p className="text-slate-200 text-2xl">Fast</p>
           </div>
           <div className="text-center">
-            <div className="text-blue-600 mb-2">🎯</div>
-            <p className="text-slate-600">Accurate</p>
+            <div className="text-blue-600 mb-2 text-6xl">🎯</div>
+            <p className="text-slate-200 text-2xl">Accurate</p>
           </div>
         </div>
       </div>

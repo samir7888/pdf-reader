@@ -23,7 +23,15 @@ export const uploadPdf = async (file: FormData) => {
   });
 };
 
-export const askQuestion = async (question: string) => {
-  const response = await apiClient.post("/ask", { question });
+export const uploadLink = async (url: string) => {
+  await apiClient.post("/youtube", { url });
+};
+
+export const askPdf = async (question: string) => {
+  const response = await apiClient.post("/ask/pdf", { question });
+  return response.data;
+};
+export const askYoutube = async (question: string) => {
+  const response = await apiClient.post("/ask/youtube", { question });
   return response.data;
 };

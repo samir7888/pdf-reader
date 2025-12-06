@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, FileText, ArrowLeft, Loader2 } from 'lucide-react';
-import { askQuestion } from '../../services/api';
+import { askPdf } from '../../services/api';
 
 interface ChatInterfaceProps {
   fileName: string;
@@ -50,7 +50,7 @@ export function ChatInterface({ fileName, onReset }: ChatInterfaceProps) {
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    const { answer } = await askQuestion(userMessage.content);
+    const { answer } = await askPdf(userMessage.content);
     setIsAnswerGenerating(false);
     setInputValue('');
     setIsTyping(true);
