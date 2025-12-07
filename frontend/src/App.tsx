@@ -7,14 +7,19 @@ import LinkInput from './components/LinkInput';
 
 export default function App() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [tab, setTab] = useState<'pdf' | 'youtube'>('pdf')
+  const [tab, setTab] = useState<'pdf' | 'youtube'>('pdf');
+  const [uploadedLink, setUploadedLink] = useState<string | null>(null);
 
   const handleFileUpload = (file: File) => {
     setUploadedFile(file);
   };
 
+  const handleLinkUpload = (link: string) => {
+    setUploadedLink(link);
+  }
   const handleReset = () => {
     setUploadedFile(null);
+    setUploadedLink(null);
   };
 
 
@@ -31,13 +36,7 @@ export default function App() {
         className="absolute inset-0 -z-20"
         style={{
           background: "#000000",
-          backgroundImage: `
-        linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px),
-        radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)
-      `,
-          backgroundSize: "20px 20px, 20px 20px, 20px 20px",
-          backgroundPosition: "0 0, 0 0, 0 0",
+
         }}
       />
       {/* Your Content/Components */}
@@ -48,7 +47,7 @@ export default function App() {
             !uploadedFile ? (
               <UploadSection onFileUpload={handleFileUpload} type={tab} />
             ) : (
-              <ChatInterface fileName={uploadedFile.name} onReset={handleReset} />
+              <ChatInterface type='pdf' Name={uploadedFile.name} onReset={handleReset} />
             )
           )
         }
@@ -58,7 +57,15 @@ export default function App() {
             <div className='flex items-center justify-center px-4'>
               <div className="w-full max-w-4xl space-y-24">
                 <Heading type={tab} />
-                <LinkInput />
+                {
+                  tab === 'youtube' && (
+                    !uploadedLink ? (
+                      <LinkInput uploadedLink={handleLinkUpload} />
+                    ) : (
+                      <ChatInterface type='youtube' Name={"YouTube Video"} onReset={() => setUploadedLink(null)} />
+                    )
+                  )
+                }
               </div>
             </div>
           )

@@ -89,7 +89,7 @@ export function UploadSection({ onFileUpload, type }: UploadSectionProps) {
           )
         }
         {/* Upload Area */}
-        <div className=" rounded-2xl shadow-sm border border-slate-700 p-8">
+        <div className=" rounded-2xl shadow-sm">
           <div
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}

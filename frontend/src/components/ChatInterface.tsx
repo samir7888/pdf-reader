@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, FileText, ArrowLeft, Loader2 } from 'lucide-react';
-import { askPdf } from '../../services/api';
+import { askPdf, askYoutube } from '../../services/api';
 
 interface ChatInterfaceProps {
-  fileName: string;
+  type: 'pdf' | 'youtube';
+  Name?: string;
   onReset: () => void;
 }
 
@@ -14,12 +15,12 @@ interface Message {
   timestamp: Date;
 }
 
-export function ChatInterface({ fileName, onReset }: ChatInterfaceProps) {
+export function ChatInterface({ Name, onReset, type }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       type: 'assistant',
-      content: `I've analyzed "${fileName}". Feel free to ask me any questions about the document!`,
+      content: `I've analyzed "${Name}". Feel free to ask me any questions about the ${type === 'pdf' ? 'documnet' : 'video'}!`,
       timestamp: new Date(),
     },
   ]);
@@ -50,7 +51,14 @@ export function ChatInterface({ fileName, onReset }: ChatInterfaceProps) {
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    const { answer } = await askPdf(userMessage.content);
+    let answer = '';
+    if (type === 'pdf') {
+      const result = await askPdf(userMessage.content);
+      answer = result.answer;
+    } else {
+      const result = await askYoutube(userMessage.content);
+      answer = result.answer;
+    }
     setIsAnswerGenerating(false);
     setInputValue('');
     setIsTyping(true);
@@ -68,14 +76,14 @@ export function ChatInterface({ fileName, onReset }: ChatInterfaceProps) {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col text-white h-screen">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-6 py-4">
+      <header className="bg-neutral-900 rounded-2xl border-b border-slate-200 px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={onReset}
-              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
             >
               <ArrowLeft className="w-5 h-5 text-slate-600" />
             </button>
@@ -84,8 +92,8 @@ export function ChatInterface({ fileName, onReset }: ChatInterfaceProps) {
                 <FileText className="w-5 h-5 text-red-600" />
               </div>
               <div>
-                <p className="text-slate-900">{fileName}</p>
-                <p className="text-slate-500">Ask questions about this document</p>
+                <p className="text-slate-200 text-2xl">{Name}</p>
+                <p className="text-slate-300">Ask questions about this {type === "pdf" ? 'document' : 'video'}</p>
               </div>
             </div>
           </div>
@@ -103,7 +111,7 @@ export function ChatInterface({ fileName, onReset }: ChatInterfaceProps) {
               <div
                 className={`max-w-[80%] rounded-2xl px-5 py-3 ${message.type === 'user'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-white border border-slate-200 text-slate-900'
+                  : 'bg-neutral-800 border border-slate-900 text-slate-300'
                   }`}
               >
                 <p className="whitespace-pre-wrap">{message.content}</p>
@@ -135,21 +143,21 @@ export function ChatInterface({ fileName, onReset }: ChatInterfaceProps) {
       </div>
 
       {/* Input */}
-      <div className="bg-white border-t border-slate-200 px-6 py-4">
+      <div className="bg-neutral-900 rounded-2xl border-t border-slate-800 px-6 py-4">
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
-          <div className="flex gap-3 items-end bg-slate-50 rounded-2xl p-2 border border-slate-200 focus-within:border-blue-500 transition-colors">
+          <div className="flex gap-3 items-end bg-gray-900 rounded-2xl p-2 border border-neutral-800 focus-within:border-blue-500 transition-colors">
             <input
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Ask a question about your document..."
-              className="flex-1 bg-transparent px-3 py-2 outline-none text-slate-900 placeholder:text-slate-500"
+              placeholder={`Ask a question about your ${type === "pdf" ? 'document' : 'video'}...`}
+              className="flex-1 bg-transparent px-3 py-2 outline-none text-slate-100 placeholder:text-slate-500"
               disabled={isTyping}
             />
             <button
               type="submit"
               disabled={!inputValue.trim() || isTyping}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors"
+              className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-800 disabled:cursor-not-allowed text-blue p-3 rounded-xl transition-colors"
             >
               <Send className="w-5 h-5" />
             </button>
